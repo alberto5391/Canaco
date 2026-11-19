@@ -1,0 +1,121 @@
+{% extends 'partials/sidebar_base.html' %}
+{% load static %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="profile-page profile-page-showcase">
+    {% if messages %}
+    <div class="profile-messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar">
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <section class="profile-card profile-showcase" aria-label="Perfil de usuario">
+        <header class="profile-banner">
+            <div class="profile-avatar-wrap">
+                {% if perfil_usuario.foto_perfil %}
+                <img src="{{ perfil_usuario.foto_perfil.display_url }}"
+                     alt="Foto de perfil de {{ request.user.username }}"
+                     class="profile-photo">
+                {% else %}
+                <img src="{% static 'uploads/profile-default.jpg' %}"
+                     alt="Foto de perfil predeterminada"
+                     class="profile-photo">
+                {% endif %}
+                <a class="profile-avatar-edit"
+                   href="{% url 'home:crud_perfil' %}"
+                   aria-label="Cambiar foto de perfil">
+                    <i class="bi bi-camera-fill" aria-hidden="true"></i>
+                </a>
+            </div>
+
+            <div class="profile-identity">
+                <h1>
+                    {% if request.user.first_name %}
+                    {{ request.user.first_name }}
+                    {% else %}
+                    {{ request.user.username }}
+                    {% endif %}
+                </h1>
+                <p>
+                    <i class="bi bi-shield-fill" aria-hidden="true"></i>
+                    {% if request.user.is_superuser %}
+                    Administrador
+                    {% elif request.user.is_staff %}
+                    Editor
+                    {% else %}
+                    Colaborador
+                    {% endif %}
+                </p>
+            </div>
+
+            <span class="profile-status">
+                <span aria-hidden="true"></span>
+                Cuenta activa
+            </span>
+        </header>
+
+        <div class="profile-details">
+            <div class="profile-details-column">
+                <div class="profile-detail-item">
+                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                    <div>
+                        <span>Usuario:</span>
+                        <strong>{{ request.user.username }}</strong>
+                    </div>
+                </div>
+                <div class="profile-detail-item">
+                    <i class="bi bi-envelope-fill" aria-hidden="true"></i>
+                    <div>
+                        <span>Correo electrónico:</span>
+                        <strong>{{ request.user.email|default:"Sin registrar" }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-details-column profile-details-column-secondary">
+                <div class="profile-detail-item">
+                    <i class="bi bi-person-vcard-fill" aria-hidden="true"></i>
+                    <div>
+                        <span>Nombre:</span>
+                        <strong>{{ request.user.first_name|default:"Sin registrar" }}</strong>
+                    </div>
+                </div>
+                <div class="profile-surnames">
+                    <div class="profile-detail-item">
+                        <i class="bi bi-calendar3" aria-hidden="true"></i>
+                        <div>
+                            <span>Paterno:</span>
+                            <strong>{{ perfil_usuario.apellido_paterno|default:"Sin registrar" }}</strong>
+                        </div>
+                    </div>
+                    <div class="profile-detail-item">
+                        <i class="bi bi-calendar3" aria-hidden="true"></i>
+                        <div>
+                            <span>Materno:</span>
+                            <strong>{{ perfil_usuario.apellido_materno|default:"Sin registrar" }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-showcase-actions">
+            <a href="{% url 'home:crud_perfil' %}" class="profile-edit-button">
+                <i class="bi bi-pencil-fill" aria-hidden="true"></i>
+                Editar mi perfil
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock content %}

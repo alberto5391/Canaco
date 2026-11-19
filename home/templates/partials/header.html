@@ -1,0 +1,107 @@
+{% load static %}
+
+<div id="site-mobile-menu" class="site-mobile-menu site-navbar-target" aria-hidden="true">
+    <div class="site-mobile-menu-body">
+        <p class="site-mobile-menu-heading">Navegación</p>
+        <ul class="site-nav-wrap">
+            <li class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+                <a href="{% url 'home:index' %}">
+                    <i class="bi bi-house-door" aria-hidden="true"></i>
+                    <span>Inicio</span>
+                </a>
+            </li>
+            <li class="{% if request.resolver_match.url_name == 'categoria' %}active{% endif %}">
+                <a href="{% url 'home:categoria' %}">
+                    <i class="bi bi-grid" aria-hidden="true"></i>
+                    <span>Categoría</span>
+                </a>
+            </li>
+            {% if request.user.is_authenticated %}
+            <li class="{% if request.resolver_match.url_name == 'perfil' %}active{% endif %}">
+                <a href="{% url 'home:perfil' %}">
+                    <i class="bi bi-person" aria-hidden="true"></i>
+                    <span>Perfil</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+        <form action="{% url 'home:index' %}"
+              method="get"
+              class="site-mobile-search-form d-sm-none"
+              role="search">
+            <input type="search"
+                   name="q"
+                   class="form-control"
+                   placeholder="Buscar..."
+                   aria-label="Buscar noticias">
+            <button type="submit" aria-label="Buscar">
+                <i class="bi bi-search" aria-hidden="true"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<nav class="site-nav{% if request.resolver_match.url_name == 'index' %} site-nav-home{% endif %}" aria-label="Navegación principal">
+    <div class="container">
+        <div class="menu-bg-wrap">
+            <div class="site-navigation">
+                <div class="site-navigation-brand">
+                    <button type="button"
+                            class="burger site-menu-toggle js-menu-toggle light"
+                            aria-label="Abrir menú"
+                            aria-expanded="false"
+                            aria-controls="site-mobile-menu">
+                        <span></span>
+                    </button>
+                    <a href="{% url 'home:index' %}" class="logo m-0">
+                        CANACO<span>.</span>
+                    </a>
+                </div>
+
+                <!-- Acciones del lado derecho -->
+                <div class="site-navigation-actions">
+                    {% if request.user.is_authenticated %}
+                    <div class="site-user-actions">
+                        <a href="{% url 'home:perfil' %}"
+                           class="site-user-profile"
+                           aria-label="Perfil de {{ request.user.username }}">
+                            <span class="site-user-role">
+                                {% if request.user.is_superuser %}
+                                    Administrador
+                                {% elif request.user.is_staff %}
+                                    Operador
+                                {% else %}
+                                    Colaborador
+                                {% endif %}
+                            </span>
+                            <i class="bi bi-chevron-down site-user-chevron" aria-hidden="true"></i>
+                        </a>
+                        <span class="site-nav-divider" aria-hidden="true"></span>
+                        <form method="post" action="{% url 'home:logout' %}" class="site-logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="site-logout-button">
+                                <i class="bi bi-box-arrow-right me-1" aria-hidden="true"></i>
+                                <span>Cerrar sesión</span>
+                            </button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="site-guest-actions">
+                        <a href="{% url 'home:login' %}"
+                           class="site-guest-login">
+                            <i class="bi bi-person-circle me-1" aria-hidden="true"></i>
+                            Iniciar sesión
+                        </a>
+                        <a href="{% url 'home:sign_up' %}"
+                           class="site-logout-button">
+                            <i class="bi bi-person-plus me-1" aria-hidden="true"></i>
+                            Registro
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>
