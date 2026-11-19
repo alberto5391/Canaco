@@ -1,1 +1,8 @@
-
+﻿asgiref==3.12.1
+Django==4.2
+django-mysql==4.19.0
+gunicorn==27.0.1
+mysqlclient==2.2.8
+sqlparse==0.6.0
+tzdata==2026.4
+whitenoise==6.12.0
